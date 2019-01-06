@@ -1,0 +1,7 @@
+@import './variables.css';
+
+html {
+  background-color: $backgroundColor;
+  color: $textColor;
+  font-family: helvetica, sans-serif;
+}

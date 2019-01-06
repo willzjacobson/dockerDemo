@@ -1,0 +1,4 @@
+:global {
+  @import 'settings.css';
+  @import 'variables.css';
+}

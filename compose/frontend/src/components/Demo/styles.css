@@ -1,0 +1,16 @@
+@import '../../styles/variables.css';
+
+.dang {
+  color: red;
+  font-weight: bold;
+}
+
+.loading {
+  color: green;
+  font-weight: bold;
+}
+
+.sweet {
+  color: $textColor;
+  font-weight: bold;
+}
