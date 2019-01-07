@@ -19,8 +19,8 @@ services:
       - PORT=80
       - MONGO_HOST=mongo
       - DB=admin
-    ports :
-      - 80:80
+    expose:
+      - "80"
     networks:
       - badass
     depends_on:
