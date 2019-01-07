@@ -1,105 +1,88 @@
+import axios from 'axios';
 import React from 'react';
-import { connect } from 'react-redux';
-import redux, { bindActionCreators } from 'redux';
-
-import { filesActions } from '../../actions';
-import { IFiles } from '../../interfaces';
 
 import * as styles from './styles.css';
 
-
-interface IDemoProps {
-  error: Error;
-  files: IFiles;
-  filesActions: any;
-  loadingFiles: boolean;
-  loadingCategories: boolean;
-  match: {
-    params: {
-      expressId: string;
-    };
-  };
+interface IThought {
+  content: string;
 }
 
-class Demo extends React.Component<IDemoProps> {
-  componentDidMount() {
-    const { files } = this.props;
-    // If there is no file data in the store, go get it!
-    if (!files.length) {
-      this.refreshFileData();
-    }
-  }
+interface IDemoState {
+  error: string;
+  thoughts: IThought[];
+}
 
-  componentDidUpdate(prevProps: IDemoProps) {
-    // If expressId param in the route has changed, get file data for the new Id
-    if (this.props.match.params.expressId !== prevProps.match.params.expressId) {
-      this.refreshFileData();
-    }
-  }
+class Demo extends React.Component<{}, IDemoState> {
+  state = {
+    error: '',
+    thoughts: [],
+  };
 
-  refreshFileData() {
-    this.props.filesActions.fetchFiles(this.props.match.params.expressId);
-  }
+  fetchThoughts = async () => {
+    try {
+      const { data } = await axios.get('/api');
+      this.setState({ thoughts: data });
+    } catch (err) {
+      this.setState({
+        error: `fetchThoughts Error: ${err.message}\n${err.stack}`,
+      });
+    }
+  };
+
+  seedThoughts = async () => {
+    try {
+      await axios.post('/api');
+    } catch (err) {
+      this.setState({
+        error: `seedDatabase Error: ${err.message}\n${err.stack}`,
+      });
+    }
+  };
+
+  deleteThoughts = async () => {
+    try {
+      const { data } = await axios.delete('/api');
+      this.setState({ thoughts: data });
+    } catch (err) {
+      this.setState({
+        error: `deleteThoughts Error: ${err.message}\n${err.stack}`,
+      });
+    }
+  };
 
   render() {
-    const {
-      error,
-      loadingFiles,
-      files,
-      match: {
-        params: { expressId },
-      },
-    } = this.props;
+    const { error, thoughts } = this.state;
 
-    const result = loadingFiles ? (
-      <div className={styles.loading}>Loading...</div>
-    ) : error ? (
-      <div>
-        <p>Error Message: <span className={styles.dang}>{error.message}</span></p>
-        <p>Error Stack: <span className={styles.dang}>{error.stack}</span></p>      
-      </div>
+    const thoughtDisplay = thoughts.length ? (
+      thoughts.map((t: IThought, i: number) => (
+        <p className={styles.thought} key={i}>
+          {t.content}
+        </p>
+      ))
     ) : (
-      <div>
-        <p className={styles.sweet}>Your request has succeeded. Your data is below.</p>
-        <p className={styles.sweet}>What you would do now is build a nice component tree for it.</p>
-        <p>{JSON.stringify(files)}</p>
-      </div>
+      <p>No thoughts available; please seed the database.</p>
     );
 
-    return (
-      <>
-        <div className={styles.sweet}>
-          <p>Welcome to the demo page.</p>
-          <p>The purpose of this page is simply to demonstrate how:</p>
-          <p>1) React is hooked up (via Redux) to the backend of the application</p>
-          <p>2) How state is managed with Redux and React-Redux</p>
-          <p>Kindly pretend for a moment that you are requesting data from the fileService on uploaded documents for Express Application Id: {expressId}.</p>
-          <p>There is a 50% chance your request will succeed. The UI will reflect the result.</p>
-        </div>
-        <hr />
+    const errorDisplay = error.length ? (
+      <p className={styles.error}>{error}</p>
+    ) : null;
 
-        {result}
-      </>
+    return (
+      <div className={styles.text}>
+        <p>This app lets you read the thoughts of randome people in LA.</p>
+        <p>Click "Seed Thoughts" to gather the thoughts.</p>
+        <p>Click "GET Thoughts" to view the thoughts.</p>
+        <p>Click "DELETE Thoughts" to erase the thoughts.</p>
+        <button onClick={this.seedThoughts}>Seed Thoughts</button>
+        <button onClick={this.fetchThoughts}>GET Thoughts</button>
+        <button onClick={this.deleteThoughts}>DELETE Thoughts</button>
+        <hr />
+        <h2>Thoughts:</h2>
+        {thoughtDisplay}
+        {errorDisplay}
+      </div>
     );
   }
 }
 
-function mapStateToProps(state: any) {
-  return {
-    error: state.demo.error,
-    expressId: state.demo.expressId,
-    files: state.demo.files,
-    loadingFiles: state.demo.loadingFiles,
-  };
-}
-
-function mapDispatchToProps(dispatch: redux.Dispatch) {
-  return {
-    filesActions: bindActionCreators(filesActions, dispatch),
-  };
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Demo);
+export default Demo;

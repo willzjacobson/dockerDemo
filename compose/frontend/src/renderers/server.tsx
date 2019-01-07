@@ -3,7 +3,6 @@ import fs from 'fs';
 import { join } from 'path';
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router-dom';
 import { promisify } from 'util';
 
@@ -12,9 +11,6 @@ const readFileAsync = promisify(fs.readFile);
 import { NODE_ENV, WEBPACK_OUTPUT_DIR } from '../config';
 
 import App from '../components/App';
-import configureStore from '../store';
-
-const store = configureStore({});
 
 const serverRender = async (
   req: express.Request,
@@ -29,11 +25,9 @@ const serverRender = async (
   const context: any = {};
   // Markup to send preloaded to client
   const app = renderToString(
-    <Provider store={store}>
-      <StaticRouter location={req.url} context={context}>
-        <App />
-      </StaticRouter>
-    </Provider>,
+    <StaticRouter location={req.url} context={context}>
+      <App />
+    </StaticRouter>,
   );
 
   try {

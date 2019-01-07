@@ -174,7 +174,7 @@ module.exports = async env => {
         // so it is ignored by express.static.
         // However, webpack dev server prefers 'index.html'
         filename: env.development ? 'index.html' : 'generated.html',
-        title: 'EMA',
+        title: 'DEMO',
         // Including Font Awesome CSS so svgs are styled correctly on server render
         headHtmlSnippet: `
           <style>${dom.css().replace(/\s/g, '')}</style>`,

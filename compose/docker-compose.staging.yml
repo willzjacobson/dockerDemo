@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+
+  mongo:
+    image: mongo
+    restart: always
+    env_file: ./env
+    expose:
+      - "27017"
+    networks:
+      - badass
+
+  backend:
+    image: willzj/demo_backend:latest
+    container_name : backend
+    env_file: ./env
+    environment:
+      - PORT=80
+      - DB=admin
+      - MONGO_HOST=mongo
+    ports :
+      - 80:80
+    networks:
+      - badass
+    depends_on:
+      - mongo
+
+  frontend:
+    image: willzj/demo_frontend:latest
+    container_name : frontend
+    ports:
+      - 3000:8080
+    networks:
+      - badass
+    environment:
+      - API_URL=http://backend
+    depends_on:
+      - backend
+
+networks:
+  badass:
+    driver: bridge
