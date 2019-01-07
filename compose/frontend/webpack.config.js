@@ -178,7 +178,6 @@ module.exports = async env => {
         // Including Font Awesome CSS so svgs are styled correctly on server render
         headHtmlSnippet: `
           <style>${dom.css().replace(/\s/g, '')}</style>`,
-        favicon: join(__dirname, './src/public/favicon.ico'),
         minify: {
           removeComments: true,
           collapseWhitespace: true,
