@@ -17,8 +17,8 @@ services:
     env_file: ./env
     environment:
       - PORT=80
-      - MONGO_HOST=mongo
       - DB=admin
+      - MONGO_HOST=mongo
     expose:
       - "80"
     networks:

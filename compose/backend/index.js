@@ -4,25 +4,34 @@ const app = require('express')();
 // Variables passed in by docker-compose
 const { PORT, MONGO_INITDB_ROOT_USERNAME, MONGO_INITDB_ROOT_PASSWORD, MONGO_HOST, DB } = process.env;
 
+const dbConnectionString = `mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}/${DB}`;
+
 const freshThoughts = require('./thoughts');  // Content to be inserted into DB
 const Thought = mongoose.model('Thought', { content: String }); // initialize mongoose model
 
 
 // ===== CONNECT TO DB AND START SERVER =====
 
+let serverStarted = false;
 (function connectToDB() {
-    mongoose.connect(`mongodb://${MONGO_INITDB_ROOT_USERNAME}:${MONGO_INITDB_ROOT_PASSWORD}@${MONGO_HOST}/${DB}`, { useNewUrlParser: true });
+
+    mongoose.connect(dbConnectionString, { useNewUrlParser: true });
     const db = mongoose.connection;
     
     // If fail to connect to DB, try again.
     db.on('error', () => {
-        console.log('Failed to connect to DB, trying again');
+        console.log('Failed to connect to DB, trying again.');
         setTimeout(connectToDB, 1000);
     });
-    
+
     // Once connected to DB, define mongood model and start express server
     db.once('open', async () => {
-        app.listen(PORT, () => console.log(`The server is listening closely on port ${PORT}...`));
+        console.log('Connected to DB, starting server.')
+        if (!serverStarted) {
+            app.listen(PORT, () => console.log(`The server is listening closely on port ${PORT}...`));
+        }
+        // Intentionally not put in callback so that we dont try to start the server twice
+        serverStarted = true;
     });
 })()
 
