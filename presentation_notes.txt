@@ -12,7 +12,7 @@ docker run --rm -d -p 3001:3000 -e COLOR=pink --name green willzj/single_test:la
   Inspect. Look at network config.
   Enter one. Ping the other. Point: it's like microservices
 
-docker run --rm -d -p 8080:3000 -v $(pwd):/usr/src/app -e COLOR=pink -w "/usr/src/app" node:8.11.1-alpine npm run dev
+docker run --rm -d -p 3000:3000 -v $(pwd):/usr/src/app -e COLOR=pink -w "/usr/src/app" node:8.11.1-alpine npm run dev
 
 docker-compose up -d
   poke around frontend

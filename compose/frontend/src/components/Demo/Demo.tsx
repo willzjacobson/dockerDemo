@@ -69,9 +69,7 @@ class Demo extends React.Component<{}, IDemoState> {
 
     return (
       <div className={styles.text}>
-        <p>
-          This app lets you read the thoughts of random people in LA. Cool!!
-        </p>
+        <p>This app lets you read the thoughts of random people in LA.</p>
         <p>Click "Seed Thoughts" to gather the thoughts.</p>
         <p>Click "GET Thoughts" to view the thoughts.</p>
         <p>Click "DELETE Thoughts" to erase the thoughts.</p>
