@@ -34,7 +34,7 @@ services:
     networks:
       - badass
     environment:
-      - API_URL=http://backend
+      - API_HOST=backend
     depends_on:
       - backend
 

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import express from 'express';
 
-import { API_URL } from '../../config';
+import { API_HOST } from '../../config';
+const API_URL = `http://${API_HOST}`;
 
 const router = express.Router();
 

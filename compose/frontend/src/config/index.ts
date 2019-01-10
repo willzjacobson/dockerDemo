@@ -13,7 +13,7 @@ const env =
     ? '-qa'
     : '-staging';
 
-export const API_URL = process.env.API_URL || 'API url not provided';
+export const API_HOST = process.env.API_HOST || 'API_HOST not provided';
 export const PORT = process.env.PORT || 8080;
 export const NODE_ENV = process.env.NODE_ENV;
 export const WEBPACK_OUTPUT_DIR = join(__dirname, '../../dist');

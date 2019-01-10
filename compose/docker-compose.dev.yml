@@ -13,6 +13,7 @@ services:
 
   backend:
     build: ./backend
+    image: willzj/demo_backend:latest
     container_name : backend
     env_file: ./env
     environment:
@@ -31,9 +32,10 @@ services:
 
   frontend:
     build: ./frontend
+    image: willzj/demo_frontend:latest
     container_name : frontend
     environment:
-      - API_URL=http://backend
+      - API_HOST=backend
     ports:
       - 3000:3000
     networks:
