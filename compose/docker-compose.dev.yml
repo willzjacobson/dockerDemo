@@ -4,7 +4,7 @@ services:
 
   mongo:
     image: mongo
-    container_name : mongo
+    container_name: mongo
     restart: always
     env_file: ./env
     expose:
@@ -15,7 +15,7 @@ services:
   backend:
     build: ./backend
     image: willzj/demo_backend:latest
-    container_name : backend
+    container_name: backend
     env_file: ./env
     environment:
       - PORT=80
@@ -34,9 +34,10 @@ services:
   frontend:
     build: ./frontend
     image: willzj/demo_frontend:latest
-    container_name : frontend
+    container_name: frontend
     environment:
       - API_HOST=backend
+      - POST=3000
     ports:
       - 3000:3000
     networks:

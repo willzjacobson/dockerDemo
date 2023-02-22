@@ -20,6 +20,7 @@ class Demo extends React.Component<{}, IDemoState> {
 
   fetchThoughts = async () => {
     try {
+      console.log('fetching thoughts...');
       const { data } = await axios.get('/api');
       this.setState({ thoughts: data });
     } catch (err) {
